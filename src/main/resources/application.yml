@@ -1,0 +1,35 @@
+general:
+  kafka-topic: trader-updates
+
+spring:
+  # --- NEW: Database Connection Settings ---
+  datasource:
+    url: jdbc:h2:mem:midasdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+  # --- NEW: JPA / Hibernate Settings ---
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  # --- NEW: Enable H2 Web Console (Optional but highly recommended for debugging) ---
+  h2:
+    console:
+      enabled: true
+
+  # --- EXISTING: Your Kafka Settings from Task 2 ---
+  kafka:
+    consumer:
+      group-id: midas-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
